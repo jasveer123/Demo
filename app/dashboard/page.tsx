@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
-
 interface User {
   id: string;
   firstName: string;
@@ -28,31 +26,27 @@ export default function DashboardPage() {
       return;
     }
 
-    fetch(`${API_URL}/auth/me`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error("Unauthorized");
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setUser(data.user);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching user:", error);
-        localStorage.removeItem("token");
-        router.push("/login");
+    // Static user data - no backend API call
+    // In a real static app, you might store user data in localStorage during login
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    } else {
+      // Fallback mock user
+      setUser({
+        id: "mock-user",
+        firstName: "John",
+        lastName: "Doe",
+        username: "johndoe",
+        email: "john@example.com",
       });
+    }
+    setLoading(false);
   }, [router]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("user");
     router.push("/login");
   };
 

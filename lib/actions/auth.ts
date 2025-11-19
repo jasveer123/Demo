@@ -1,7 +1,5 @@
 "use server";
 
-import { signup as signupAPI, login as loginAPI } from "@/lib/api";
-
 export async function signupAction(formData: FormData) {
   const data = {
     firstName: formData.get("firstName") as string,
@@ -12,12 +10,21 @@ export async function signupAction(formData: FormData) {
     gender: formData.get("gender") as string,
   };
 
-  try {
-    const response = await signupAPI(data);
-    return { success: true, data: response };
-  } catch (error: any) {
-    return { success: false, error: error.message || "Signup failed" };
-  }
+  // Static response - no backend API call
+  const mockResponse = {
+    message: "Signup successful",
+    token: "mock-token-" + Date.now(),
+    user: {
+      id: "mock-id-" + Date.now(),
+      firstName: data.firstName,
+      lastName: data.lastName,
+      username: data.username,
+      email: data.email,
+      gender: data.gender,
+    },
+  };
+
+  return { success: true, data: mockResponse };
 }
 
 export async function loginAction(formData: FormData) {
@@ -26,11 +33,19 @@ export async function loginAction(formData: FormData) {
     password: formData.get("password") as string,
   };
 
-  try {
-    const response = await loginAPI(data);
-    return { success: true, data: response };
-  } catch (error: any) {
-    return { success: false, error: error.message || "Login failed" };
-  }
+  // Static response - no backend API call
+  const mockResponse = {
+    message: "Login successful",
+    token: "mock-token-" + Date.now(),
+    user: {
+      id: "mock-id-" + Date.now(),
+      firstName: "John",
+      lastName: "Doe",
+      username: data.email.split("@")[0],
+      email: data.email,
+    },
+  };
+
+  return { success: true, data: mockResponse };
 }
 
