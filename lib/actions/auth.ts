@@ -1,6 +1,10 @@
 "use server";
 
-export async function signupAction(formData: FormData) {
+type AuthActionResult = 
+  | { success: true; data: { message: string; token: string; user: any } }
+  | { success: false; error: string };
+
+export async function signupAction(formData: FormData): Promise<AuthActionResult> {
   const data = {
     firstName: formData.get("firstName") as string,
     lastName: formData.get("lastName") as string,
@@ -27,7 +31,7 @@ export async function signupAction(formData: FormData) {
   return { success: true, data: mockResponse };
 }
 
-export async function loginAction(formData: FormData) {
+export async function loginAction(formData: FormData): Promise<AuthActionResult> {
   const data = {
     email: formData.get("email") as string,
     password: formData.get("password") as string,

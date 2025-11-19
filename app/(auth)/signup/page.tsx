@@ -37,12 +37,12 @@ export default function SignupPage() {
 
     const result = await signupAction(formData);
 
-    if (result.success && result.data) {
+    if (result.success) {
       // Store user data for potential auto-login or redirect to login
       localStorage.setItem("token", result.data.token);
       localStorage.setItem("user", JSON.stringify(result.data.user));
       router.push("/login");
-    } else if (result.error) {
+    } else {
       setError("root", { message: result.error });
     }
   };

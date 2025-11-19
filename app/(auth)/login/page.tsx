@@ -26,11 +26,11 @@ export default function LoginPage() {
 
     const result = await loginAction(formData);
 
-    if (result.success && result.data) {
+    if (result.success) {
       localStorage.setItem("token", result.data.token);
       localStorage.setItem("user", JSON.stringify(result.data.user));
       router.push("/dashboard");
-    } else if (result.error) {
+    } else {
       setError("root", { message: result.error });
     }
   };
